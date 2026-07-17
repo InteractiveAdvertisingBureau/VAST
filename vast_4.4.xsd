@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.iab.com/VAST"
+           targetNamespace="http://www.iab.com/VAST"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <xs:annotation>
+    <xs:documentation>
+      IAB VAST (Video Ad Serving Template), Version 4.4 - DRAFT for working group discussion.
+      This draft is based on the published VAST 4.2 XSD structure and incorporates proposed
+      VAST 4.4 CTV Ad Portfolio changes:
+      - NonLinearAds support for CTV Pause, Screensaver, Overlay, Squeezeback, and In-Scene ads.
+      - MediaFiles and Duration under NonLinear.
+      - InteractiveCreativeFile under NonLinear MediaFiles for SIMID/nonlinear interactivity.
+      - Icons under NonLinearAds.
+      - Standard QR code CreativeExtension elements.
+      - Standardized VAST Extensions payloads may carry plcmt, pos, playbackmethod, and attr.
+
+      NOTE: This draft intentionally uses xs:string for URI-like elements to avoid rejecting
+      valid VAST macro syntax or placeholder values during working-group discussion. The final
+      publication may tighten these types if desired.
+    </xs:documentation>
+  </xs:annotation>
+
+  <!-- ========================= -->
+  <!-- Common simple types        -->
+  <!-- ========================= -->
+
+  <xs:simpleType name="vastURI_type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="vastTime_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\d{2}:)?\d{2}:\d{2}(\.\d{1,3})?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="vastPercent_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d+(\.\d+)?%"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="vastIntegerOrPercent_type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\d+|\d+(\.\d+)?%)"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="vastDelivery_type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="progressive"/>
+      <xs:enumeration value="streaming"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="vastString_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string"/>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastURIElement_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type"/>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Root                       -->
+  <!-- ========================= -->
+
+  <xs:element name="VAST">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Error" type="vastURIElement_type"/>
+        <xs:element name="Ad" type="vastAd_type"/>
+      </xs:choice>
+      <xs:attribute name="version" type="xs:string" use="required" fixed="4.4"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- ========================= -->
+  <!-- Ad, InLine, Wrapper        -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastAd_type">
+    <xs:choice>
+      <xs:element name="InLine" type="vastInLine_type"/>
+      <xs:element name="Wrapper" type="vastWrapper_type"/>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+    <xs:attribute name="sequence" type="xs:integer" use="optional"/>
+    <xs:attribute name="conditionalAd" type="xs:boolean" use="optional"/>
+    <xs:attribute name="adType" type="xs:string" use="optional" default="video"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastInLine_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="AdSystem" type="vastAdSystem_type"/>
+      <xs:element name="AdTitle" type="vastString_type"/>
+      <xs:element name="Advertiser" type="vastString_type"/>
+      <xs:element name="Category" type="vastCategory_type"/>
+      <xs:element name="Description" type="vastString_type"/>
+      <xs:element name="Survey" type="vastSurvey_type"/>
+      <xs:element name="Error" type="vastURIElement_type"/>
+      <xs:element name="Impression" type="vastImpression_type"/>
+      <xs:element name="Pricing" type="vastPricing_type"/>
+      <xs:element name="ViewableImpression" type="vastViewableImpression_type"/>
+      <xs:element name="AdVerifications" type="vastAdVerifications_type"/>
+      <xs:element name="AdServingId" type="vastString_type"/>
+      <xs:element name="Creatives" type="vastCreatives_type"/>
+      <xs:element name="Extensions" type="vastExtensions_type"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="vastWrapper_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="AdSystem" type="vastAdSystem_type"/>
+      <xs:element name="VASTAdTagURI" type="vastURIElement_type"/>
+      <xs:element name="Error" type="vastURIElement_type"/>
+      <xs:element name="Impression" type="vastImpression_type"/>
+      <xs:element name="Pricing" type="vastPricing_type"/>
+      <xs:element name="ViewableImpression" type="vastViewableImpression_type"/>
+      <xs:element name="AdVerifications" type="vastAdVerifications_type"/>
+      <xs:element name="Creatives" type="vastCreatives_type"/>
+      <xs:element name="Extensions" type="vastExtensions_type"/>
+    </xs:choice>
+    <xs:attribute name="followAdditionalWrappers" type="xs:boolean" use="optional"/>
+    <xs:attribute name="allowMultipleAds" type="xs:boolean" use="optional"/>
+    <xs:attribute name="fallbackOnNoAd" type="xs:boolean" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastAdSystem_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="version" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastCategory_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="authority" type="vastURI_type" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastSurvey_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="type" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastImpression_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="id" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastPricing_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:decimal">
+        <xs:attribute name="model" type="xs:string" use="required"/>
+        <xs:attribute name="currency" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastViewableImpression_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Viewable" type="vastURIElement_type"/>
+      <xs:element name="NotViewable" type="vastURIElement_type"/>
+      <xs:element name="ViewUndetermined" type="vastURIElement_type"/>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Creatives                  -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastCreatives_type">
+    <xs:sequence>
+      <xs:element name="Creative" type="vastCreative_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastCreative_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="UniversalAdId" type="vastUniversalAdId_type"/>
+      <xs:element name="CreativeExtensions" type="vastCreativeExtensions_type"/>
+      <xs:element name="Linear" type="vastLinear_type"/>
+      <xs:element name="NonLinearAds" type="vastNonLinearAds_type"/>
+      <xs:element name="CompanionAds" type="vastCompanionAds_type"/>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+    <xs:attribute name="adId" type="xs:string" use="optional"/>
+    <xs:attribute name="sequence" type="xs:integer" use="optional"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastUniversalAdId_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="idRegistry" type="xs:string" use="optional" default="unknown"/>
+        <xs:attribute name="idValue" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Linear                     -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastLinear_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Duration" type="vastString_type"/>
+      <xs:element name="AdParameters" type="vastAdParameters_type"/>
+      <xs:element name="MediaFiles" type="vastMediaFiles_type"/>
+      <xs:element name="VideoClicks" type="vastVideoClicks_type"/>
+      <xs:element name="TrackingEvents" type="vastTrackingEvents_type"/>
+      <xs:element name="Icons" type="vastIcons_type"/>
+    </xs:choice>
+    <xs:attribute name="skipoffset" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastMediaFiles_type">
+    <xs:annotation>
+      <xs:documentation>
+        VAST 4.4: MediaFiles may be used under Linear or under NonLinear.
+        Under NonLinear, MediaFiles enables CTV Ad Portfolio image, video, and interactive
+        creative file delivery.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="MediaFile" type="vastMediaFile_type"/>
+      <xs:element name="Mezzanine" type="vastMezzanine_type"/>
+      <xs:element name="InteractiveCreativeFile" type="vastInteractiveCreativeFile_type"/>
+      <xs:element name="ClosedCaptionFiles" type="vastClosedCaptionFiles_type"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="vastMediaFile_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="id" type="xs:string" use="optional"/>
+        <xs:attribute name="delivery" type="vastDelivery_type" use="optional"/>
+        <xs:attribute name="type" type="xs:string" use="optional"/>
+        <xs:attribute name="width" type="xs:integer" use="optional"/>
+        <xs:attribute name="height" type="xs:integer" use="optional"/>
+        <xs:attribute name="codec" type="xs:string" use="optional"/>
+        <xs:attribute name="bitrate" type="xs:integer" use="optional"/>
+        <xs:attribute name="minBitrate" type="xs:integer" use="optional"/>
+        <xs:attribute name="maxBitrate" type="xs:integer" use="optional"/>
+        <xs:attribute name="scalable" type="xs:boolean" use="optional"/>
+        <xs:attribute name="maintainAspectRatio" type="xs:boolean" use="optional"/>
+        <xs:attribute name="fileSize" type="xs:integer" use="optional"/>
+        <xs:attribute name="mediaType" type="xs:string" use="optional" default="2D"/>
+        <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+        <xs:anyAttribute processContents="lax"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastMezzanine_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="id" type="xs:string" use="optional"/>
+        <xs:attribute name="delivery" type="vastDelivery_type" use="optional"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="width" type="xs:integer" use="optional"/>
+        <xs:attribute name="height" type="xs:integer" use="optional"/>
+        <xs:attribute name="codec" type="xs:string" use="optional"/>
+        <xs:attribute name="fileSize" type="xs:integer" use="optional"/>
+        <xs:attribute name="mediaType" type="xs:string" use="optional" default="2D"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastInteractiveCreativeFile_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="apiFramework" type="xs:string" use="required"/>
+        <xs:attribute name="variableDuration" type="xs:boolean" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastClosedCaptionFiles_type">
+    <xs:sequence>
+      <xs:element name="ClosedCaptionFile" type="vastClosedCaptionFile_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastClosedCaptionFile_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="language" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastVideoClicks_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="ClickThrough" type="vastClick_type"/>
+      <xs:element name="ClickTracking" type="vastClick_type"/>
+      <xs:element name="CustomClick" type="vastClick_type"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="vastClick_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="id" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- NonLinearAds - VAST 4.4   -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastNonLinearAds_type">
+    <xs:annotation>
+      <xs:documentation>
+        VAST 4.4: NonLinearAds can represent CTV Ad Portfolio formats that appear alongside,
+        over, or within content without mandating a dedicated content interruption, including
+        Pause, Screensaver, Overlay, Squeezeback, and In-Scene ads. Menu Ads are outside this
+        VAST NonLinearAds model and are signaled through Native API.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="NonLinear" type="vastNonLinear_type"/>
+      <xs:element name="TrackingEvents" type="vastTrackingEvents_type"/>
+      <xs:element name="Icons" type="vastIcons_type"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="vastNonLinear_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="AdParameters" type="vastAdParameters_type"/>
+      <xs:element name="Duration" type="vastString_type"/>
+      <xs:element name="MediaFiles" type="vastMediaFiles_type"/>
+      <xs:element name="StaticResource" type="vastStaticResource_type"/>
+      <xs:element name="IFrameResource" type="vastURIElement_type"/>
+      <xs:element name="HTMLResource" type="vastString_type"/>
+      <xs:element name="NonLinearClickThrough" type="vastClick_type"/>
+      <xs:element name="NonLinearClickTracking" type="vastClick_type"/>
+      <xs:element name="NonLinearCustomClick" type="vastClick_type"/>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+    <xs:attribute name="width" type="xs:integer" use="required"/>
+    <xs:attribute name="height" type="xs:integer" use="required"/>
+    <xs:attribute name="expandedWidth" type="xs:integer" use="optional"/>
+    <xs:attribute name="expandedHeight" type="xs:integer" use="optional"/>
+    <xs:attribute name="scalable" type="xs:boolean" use="optional"/>
+    <xs:attribute name="maintainAspectRatio" type="xs:boolean" use="optional"/>
+    <xs:attribute name="minSuggestedDuration" type="vastTime_type" use="optional"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Companions                 -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastCompanionAds_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Companion" type="vastCompanion_type"/>
+      <xs:element name="Icons" type="vastIcons_type"/>
+    </xs:choice>
+    <xs:attribute name="required" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastCompanion_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="StaticResource" type="vastStaticResource_type"/>
+      <xs:element name="IFrameResource" type="vastURIElement_type"/>
+      <xs:element name="HTMLResource" type="vastString_type"/>
+      <xs:element name="AdParameters" type="vastAdParameters_type"/>
+      <xs:element name="TrackingEvents" type="vastTrackingEvents_type"/>
+      <xs:element name="CompanionClickThrough" type="vastClick_type"/>
+      <xs:element name="CompanionClickTracking" type="vastClick_type"/>
+      <xs:element name="Icons" type="vastIcons_type"/>
+    </xs:choice>
+    <xs:attribute name="id" type="xs:string" use="optional"/>
+    <xs:attribute name="width" type="xs:integer" use="required"/>
+    <xs:attribute name="height" type="xs:integer" use="required"/>
+    <xs:attribute name="assetWidth" type="xs:integer" use="optional"/>
+    <xs:attribute name="assetHeight" type="xs:integer" use="optional"/>
+    <xs:attribute name="expandedWidth" type="xs:integer" use="optional"/>
+    <xs:attribute name="expandedHeight" type="xs:integer" use="optional"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+    <xs:attribute name="adSlotID" type="xs:string" use="optional"/>
+    <xs:attribute name="pxratio" type="xs:decimal" use="optional"/>
+    <xs:attribute name="renderingMode" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastStaticResource_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="creativeType" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastAdParameters_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="xmlEncoded" type="xs:boolean" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Tracking                   -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastTrackingEvents_type">
+    <xs:sequence>
+      <xs:element name="Tracking" type="vastTracking_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastTracking_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="event" type="xs:string" use="required"/>
+        <xs:attribute name="offset" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Icons                      -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastIcons_type">
+    <xs:sequence>
+      <xs:element name="Icon" type="vastIcon_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastIcon_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="StaticResource" type="vastStaticResource_type"/>
+      <xs:element name="IFrameResource" type="vastURIElement_type"/>
+      <xs:element name="HTMLResource" type="vastString_type"/>
+      <xs:element name="IconClicks" type="vastIconClicks_type"/>
+      <xs:element name="IconViewTracking" type="vastURIElement_type"/>
+    </xs:choice>
+    <xs:attribute name="program" type="xs:string" use="required"/>
+    <xs:attribute name="width" type="xs:integer" use="required"/>
+    <xs:attribute name="height" type="xs:integer" use="required"/>
+    <xs:attribute name="xPosition" type="vastIntegerOrPercent_type" use="required"/>
+    <xs:attribute name="yPosition" type="vastIntegerOrPercent_type" use="required"/>
+    <xs:attribute name="duration" type="vastTime_type" use="optional"/>
+    <xs:attribute name="offset" type="xs:string" use="optional"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+    <xs:attribute name="pxratio" type="xs:decimal" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastIconClicks_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="IconClickThrough" type="vastClick_type"/>
+      <xs:element name="IconClickTracking" type="vastClick_type"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Ad verification            -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastAdVerifications_type">
+    <xs:sequence>
+      <xs:element name="Verification" type="vastVerification_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastVerification_type">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="JavaScriptResource" type="vastJavaScriptResource_type"/>
+      <xs:element name="ExecutableResource" type="vastExecutableResource_type"/>
+      <xs:element name="TrackingEvents" type="vastTrackingEvents_type"/>
+      <xs:element name="VerificationParameters" type="vastString_type"/>
+    </xs:choice>
+    <xs:attribute name="vendor" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastJavaScriptResource_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+        <xs:attribute name="browserOptional" type="xs:boolean" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="vastExecutableResource_type" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="vastURI_type">
+        <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+        <xs:attribute name="type" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- CreativeExtensions / QR    -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastCreativeExtensions_type">
+    <xs:sequence>
+      <xs:element name="CreativeExtension" type="vastCreativeExtension_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastCreativeExtension_type" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="QrCodeScanUrl" type="vastURIElement_type"/>
+      <xs:element name="QrCodeImageUrl" type="vastURIElement_type"/>
+      <xs:element name="QrCodePosition" type="vastQrCodePosition_type"/>
+      <xs:element name="QrCodeSize" type="vastQrCodeSize_type"/>
+      <xs:any namespace="##other" processContents="lax"/>
+    </xs:choice>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastQrCodePosition_type">
+    <xs:attribute name="xPosition" type="vastPercent_type" use="required"/>
+    <xs:attribute name="yPosition" type="vastPercent_type" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="vastQrCodeSize_type">
+    <xs:attribute name="size" type="vastPercent_type" use="required"/>
+  </xs:complexType>
+
+  <!-- ========================= -->
+  <!-- Extensions                 -->
+  <!-- ========================= -->
+
+  <xs:complexType name="vastExtensions_type">
+    <xs:sequence>
+      <xs:element name="Extension" type="vastExtension_type" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vastExtension_type" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="plcmt" type="xs:integer"/>
+      <xs:element name="pos" type="xs:integer"/>
+      <xs:element name="playbackmethod" type="xs:integer"/>
+      <xs:element name="attr" type="xs:integer"/>
+      <xs:any namespace="##other" processContents="lax"/>
+    </xs:choice>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="ext" type="xs:string" use="optional"/>
+    <xs:attribute name="fallback" type="xs:boolean" use="optional"/>
+  </xs:complexType>
+
+</xs:schema>
