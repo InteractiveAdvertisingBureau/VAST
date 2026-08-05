@@ -22,7 +22,7 @@ Other VAST Resources
 
 * [IAB TechLab VAST tag tester - execute VAST tag](https://vasttester.iabtechlab.com/) 
 
-* [VAST Ad Tester](http://zutils.zedo.com/vastvalidator/)
+* [AdMeIn VAST Validator & Tester](https://admein.io/vast-tester)
 
 * [Google VAST Tester](https://developers.google.com/interactive-media-ads/docs/vastinspector_dual)
 
