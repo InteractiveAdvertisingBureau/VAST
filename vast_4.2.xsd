@@ -117,6 +117,7 @@
                     <xs:enumeration value="skip" />
                     <xs:enumeration value="playerExpand" />
                     <xs:enumeration value="playerCollapse" />
+                    <xs:enumeration value="notUsed" />
                     <xs:enumeration value="loaded" />
                     <xs:enumeration value="start" />
                     <xs:enumeration value="firstQuartile" />
