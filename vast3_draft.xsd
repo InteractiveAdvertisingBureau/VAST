@@ -260,7 +260,7 @@
                                   <xs:documentation>The preferred order in which multiple Creatives should be displayed</xs:documentation>
                                 </xs:annotation>
                               </xs:attribute>
-                              <xs:attribute name="AdID" type="xs:string" use="optional">
+                              <xs:attribute name="adId" type="xs:string" use="optional">
                                 <xs:annotation>
                                   <xs:documentation>Ad-ID for the creative (formerly ISCI)</xs:documentation>
                                 </xs:annotation>
@@ -385,7 +385,7 @@
                                   <xs:documentation>The preferred order in which multiple Creatives should be displayed</xs:documentation>
                                 </xs:annotation>
                               </xs:attribute>
-                              <xs:attribute name="AdID" type="xs:string" use="optional">
+                              <xs:attribute name="adId" type="xs:string" use="optional">
                                 <xs:annotation>
                                   <xs:documentation>Ad-ID for the creative (formerly ISCI)</xs:documentation>
                                 </xs:annotation>
