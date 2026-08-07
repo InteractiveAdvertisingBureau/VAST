@@ -533,7 +533,7 @@
             "values": "see:INVENTORYSTATE_values_worksheet",
             "description": "List of options indicating attributes of the inventory.",
             "descriptionformatted": "List of options indicating attributes of the inventory.",
-            "example": "<code>autoplayed,fullscreen</code>"
+            "example": "<code>autoplayed,skippable</code>"
         },
         {
             "id": 38,
