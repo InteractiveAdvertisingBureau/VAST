@@ -98,36 +98,36 @@
   </xs:complexType>
 
   <xs:complexType name="vastInLine_type">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
       <xs:element name="AdSystem" type="vastAdSystem_type"/>
-      <xs:element name="AdTitle" type="vastString_type"/>
-      <xs:element name="Advertiser" type="vastString_type"/>
-      <xs:element name="Category" type="vastCategory_type"/>
-      <xs:element name="Description" type="vastString_type"/>
-      <xs:element name="Survey" type="vastSurvey_type"/>
-      <xs:element name="Error" type="vastURIElement_type"/>
-      <xs:element name="Impression" type="vastImpression_type"/>
-      <xs:element name="Pricing" type="vastPricing_type"/>
-      <xs:element name="ViewableImpression" type="vastViewableImpression_type"/>
-      <xs:element name="AdVerifications" type="vastAdVerifications_type"/>
+      <xs:element name="Error" type="vastURIElement_type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extensions" type="vastExtensions_type" minOccurs="0"/>
+      <xs:element name="Impression" type="vastImpression_type" maxOccurs="unbounded"/>
+      <xs:element name="Pricing" type="vastPricing_type" minOccurs="0"/>
+      <xs:element name="ViewableImpression" type="vastViewableImpression_type" minOccurs="0"/>
       <xs:element name="AdServingId" type="vastString_type"/>
+      <xs:element name="AdTitle" type="vastString_type"/>
+      <xs:element name="AdVerifications" type="vastAdVerifications_type" minOccurs="0"/>
+      <xs:element name="Advertiser" type="vastString_type" minOccurs="0"/>
+      <xs:element name="Category" type="vastCategory_type" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="Creatives" type="vastCreatives_type"/>
-      <xs:element name="Extensions" type="vastExtensions_type"/>
-    </xs:choice>
+      <xs:element name="Description" type="vastString_type" minOccurs="0"/>
+      <xs:element name="Survey" type="vastSurvey_type" minOccurs="0"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="vastWrapper_type">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
       <xs:element name="AdSystem" type="vastAdSystem_type"/>
+      <xs:element name="Error" type="vastURIElement_type" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Extensions" type="vastExtensions_type" minOccurs="0"/>
+      <xs:element name="Impression" type="vastImpression_type" maxOccurs="unbounded"/>
+      <xs:element name="Pricing" type="vastPricing_type" minOccurs="0"/>
+      <xs:element name="ViewableImpression" type="vastViewableImpression_type" minOccurs="0"/>
+      <xs:element name="AdVerifications" type="vastAdVerifications_type" minOccurs="0"/>
+      <xs:element name="Creatives" type="vastCreatives_type" minOccurs="0"/>
       <xs:element name="VASTAdTagURI" type="vastURIElement_type"/>
-      <xs:element name="Error" type="vastURIElement_type"/>
-      <xs:element name="Impression" type="vastImpression_type"/>
-      <xs:element name="Pricing" type="vastPricing_type"/>
-      <xs:element name="ViewableImpression" type="vastViewableImpression_type"/>
-      <xs:element name="AdVerifications" type="vastAdVerifications_type"/>
-      <xs:element name="Creatives" type="vastCreatives_type"/>
-      <xs:element name="Extensions" type="vastExtensions_type"/>
-    </xs:choice>
+    </xs:sequence>
     <xs:attribute name="followAdditionalWrappers" type="xs:boolean" use="optional"/>
     <xs:attribute name="allowMultipleAds" type="xs:boolean" use="optional"/>
     <xs:attribute name="fallbackOnNoAd" type="xs:boolean" use="optional"/>
