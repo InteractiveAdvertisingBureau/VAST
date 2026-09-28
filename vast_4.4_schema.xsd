@@ -13,6 +13,7 @@
       - NonLinearAds support for CTV Pause, Screensaver, Overlay, Squeezeback, and In-Scene ads.
       - MediaFiles and Duration under NonLinear.
       - InteractiveCreativeFile under NonLinear MediaFiles for SIMID/nonlinear interactivity.
+      - Inline HTMLResource delivery within InteractiveCreativeFile for directly embedded SIMID HTML.
       - Icons under NonLinearAds.
       - Standard QR code CreativeExtension elements.
       - Standardized VAST Extensions payloads may carry plcmt, pos, playbackmethod, and attr.
@@ -286,13 +287,24 @@
   </xs:complexType>
 
   <xs:complexType name="vastInteractiveCreativeFile_type" mixed="true">
-    <xs:simpleContent>
-      <xs:extension base="vastURI_type">
-        <xs:attribute name="type" type="xs:string" use="required"/>
-        <xs:attribute name="apiFramework" type="xs:string" use="required"/>
-        <xs:attribute name="variableDuration" type="xs:boolean" use="optional"/>
-      </xs:extension>
-    </xs:simpleContent>
+    <xs:annotation>
+      <xs:documentation>
+        VAST 4.4: InteractiveCreativeFile may identify an interactive creative using URI text
+        (including an inline data URI) or may contain one HTMLResource child with directly
+        embedded HTML content. The URI/data-URI form and HTMLResource form are alternatives
+        and should not be supplied together in the same InteractiveCreativeFile.
+
+        Inline HTML is intended to support SIMID creatives without requiring an additional
+        network request or base64-encoding HTML into a data URI. Execution, iframe sandboxing,
+        and security requirements are defined by SIMID guidance rather than by this schema.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="HTMLResource" type="vastString_type" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="apiFramework" type="xs:string" use="required"/>
+    <xs:attribute name="variableDuration" type="xs:boolean" use="optional"/>
   </xs:complexType>
 
   <xs:complexType name="vastClosedCaptionFiles_type">
