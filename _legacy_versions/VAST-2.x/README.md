@@ -69,3 +69,19 @@ A VAST response declaring:
 
 ```xml
 <VAST version="2.0">
+```
+
+should conform to the VAST 2.0 structure and applicable VAST 2.0 requirements.
+
+Compatibility extensions may contain additional data that is not represented directly by the base VAST 2.0 XSD. Implementers using those extensions should follow the validation and processing requirements defined by the corresponding extension document.
+
+## Historical Status
+
+VAST 2.0 is retained for existing integrations and historical reference.
+
+For new development, IAB Tech Lab recommends the latest supported VAST 4.x specification, which provides native support for capabilities introduced after VAST 2.0 and reflects the current direction of the VAST standard.
+
+## Related Resources
+Current VAST repository
+VAST XML schemas
+IAB Tech Lab VAST standards page
