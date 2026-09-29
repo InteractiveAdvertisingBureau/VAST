@@ -38,11 +38,11 @@
     - [2.3.2 XML Structure](#xml)
     - [2.3.3 Encoding URIs for VAST](#encodinguris)
     - [2.3.4 Tracking](#tracking)
-    - [2.4.5 VAST Wrappers](#wrappers)
+    - [2.3.5 VAST Wrappers](#wrappers)
       - [2.3.5.1 Infinite Loops and Dead Ends](#infiniteloops)
       - [2.3.5.2 Wrapper Conflict Management and Precedence](#wrapperconflict)  
-    - [2.4.6 Error Reporting](#errorreporting)
-    - [2.4.7 Industry Icon Support](#industryicon)
+    - [2.3.6 Error Reporting](#errorreporting)
+    - [2.3.7 Industry Icon Support](#industryicon)
   - [2.4 Viewability Verification and Interactive Linear Creative](#viewability)
     - [2.4.1 Publisher Viewability](#publisherviewability)
     - [2.4.2 Viewability with Ad Verification Services](#adverificationservices)
@@ -262,7 +262,7 @@ Display advertising uses standardized browser technology to request and execute 
 
 VAST is a unidirectional means of sending ad details to a media player. Built as a layer on top of browser technology, the VAST process that uses client-side execution looks something like this:
 
-![](https://github.com/InteractiveAdvertisingBureau/vast/blob/master/specifications/assets/Client-SideAdServing.png)
+![Client-Side Ad Serving](images/4.3/Client-SideAdServing.png)
 
 
 1. <b>VAST Request:</b> At some point during content playback, either before (pre-roll), in the middle of (mid-roll), or after (post-roll), the player reaches a cue to insert an ad and uses HTTP to send the request for an ad. See section 1.1.1 on sending an ad request. The request is sent to the primary ad server, which may be the publisher’s ad server or a supply-side platform (SSP).
@@ -278,7 +278,7 @@ The example just described the general process for serving an ad directly to a m
 
 Called ad stitching (or stream stitching, ad insertion, etc.), the process looks something like this:
 
-![](https://github.com/InteractiveAdvertisingBureau/vast/blob/master/specifications/assets/Server-SideAdStitching.png)
+![Server-Side Ad Stitching](images/4.3/Server-SideAdStitching.png)
 
 1. <b>VAST Request:</b> The publisher sends an ad request to the ad-stitching service.
 2. <b>Request VAST:</b> The ad-stitching service makes a request to the ad server for a VAST tag.
