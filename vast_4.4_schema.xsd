@@ -7,9 +7,8 @@
 
   <xs:annotation>
     <xs:documentation>
-      IAB VAST (Video Ad Serving Template), Version 4.4 - DRAFT for working group discussion.
-      This draft is based on the published VAST 4.2 XSD structure and incorporates proposed
-      VAST 4.4 CTV Ad Portfolio changes:
+      IAB VAST (Video Ad Serving Template), Version 4.4
+      This version (based on VAST 4.2 XSD structure) incorporates proposed VAST 4.4 CTV Ad Portfolio changes:
       - NonLinearAds support for CTV Pause, Screensaver, Overlay, Squeezeback, and In-Scene ads.
       - MediaFiles and Duration under NonLinear.
       - InteractiveCreativeFile under NonLinear MediaFiles for SIMID/nonlinear interactivity.
@@ -17,10 +16,6 @@
       - Icons under NonLinearAds.
       - Standard QR code CreativeExtension elements.
       - Standardized VAST Extensions payloads may carry plcmt, pos, playbackmethod, and attr.
-
-      NOTE: This draft intentionally uses xs:string for URI-like elements to avoid rejecting
-      valid VAST macro syntax or placeholder values during working-group discussion. The final
-      publication may tighten these types if desired.
     </xs:documentation>
   </xs:annotation>
 
