@@ -99,7 +99,7 @@ The IAB Technology Laboratory is a nonprofit research and development consortium
 Learn more about IAB Tech Lab here: https://www.iabtechlab.com/
 
 Contributors and Technical Governance
-OpenRTB Working Group members provide contributions to this repository. Participants in the Programmatic Supply Working group must be members of IAB Tech Lab. Technical Governance and code commits for the project are provided by the IAB Tech Lab Programmatic Supply Chain Commit Group.
+Advanced TV Working Group members provide contributions to this repository. Participants in the Advanced TV Working group must be members of IAB Tech Lab. Technical Governance and code commits for the project are provided by the IAB Tech Lab Advanced TV Commit Group.
 
 Learn more about how to submit changes in our working group: So, You'd Like to Propose a Change...
 
