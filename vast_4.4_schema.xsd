@@ -7,15 +7,20 @@
 
   <xs:annotation>
     <xs:documentation>
-      IAB VAST (Video Ad Serving Template), Version 4.4
-      This version (based on VAST 4.2 XSD structure) incorporates proposed VAST 4.4 CTV Ad Portfolio changes:
+      IAB VAST (Video Ad Serving Template), Version 4.4 - DRAFT for working group discussion.
+      This draft is based on the published VAST 4.2 XSD structure and incorporates proposed
+      VAST 4.4 CTV Ad Portfolio changes:
       - NonLinearAds support for CTV Pause, Screensaver, Overlay, Squeezeback, and In-Scene ads.
       - MediaFiles and Duration under NonLinear.
-      - InteractiveCreativeFile under NonLinear MediaFiles for SIMID/nonlinear interactivity.
+      - InteractiveCreativeFile under shared MediaFiles for SIMID interactivity in both Linear and NonLinear creatives.
       - Inline HTMLResource delivery within InteractiveCreativeFile for directly embedded SIMID HTML.
       - Icons under NonLinearAds.
       - Standard QR code CreativeExtension elements.
       - Standardized VAST Extensions payloads may carry plcmt, pos, playbackmethod, and attr.
+
+      NOTE: This draft intentionally uses xs:string for URI-like elements to avoid rejecting
+      valid VAST macro syntax or placeholder values during working-group discussion. The final
+      publication may tighten these types if desired.
     </xs:documentation>
   </xs:annotation>
 
@@ -284,14 +289,20 @@
   <xs:complexType name="vastInteractiveCreativeFile_type" mixed="true">
     <xs:annotation>
       <xs:documentation>
-        VAST 4.4: InteractiveCreativeFile may identify an interactive creative using URI text
-        (including an inline data URI) or may contain one HTMLResource child with directly
-        embedded HTML content. The URI/data-URI form and HTMLResource form are alternatives
-        and should not be supplied together in the same InteractiveCreativeFile.
+        VAST 4.4: InteractiveCreativeFile is shared by Linear and NonLinear MediaFiles.
+        It may identify an interactive creative using URI text, including an inline data URI,
+        or it may contain one HTMLResource child with directly embedded HTML content.
 
-        Inline HTML is intended to support SIMID creatives without requiring an additional
-        network request or base64-encoding HTML into a data URI. Execution, iframe sandboxing,
-        and security requirements are defined by SIMID guidance rather than by this schema.
+        The URI/data-URI form and HTMLResource form are alternative representations of the
+        same interactive creative and should not be supplied together in the same
+        InteractiveCreativeFile.
+
+        HTMLResource is provided specifically to support directly embedded SIMID HTML without
+        requiring an additional network request or base64-encoding HTML into a data URI.
+        IFrameResource and StaticResource are not children of InteractiveCreativeFile; remote
+        interactive HTML remains represented directly by the InteractiveCreativeFile URI value.
+        Execution, iframe sandboxing, and security requirements are defined by SIMID guidance
+        rather than by this schema.
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
